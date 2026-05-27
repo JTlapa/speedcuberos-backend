@@ -3,6 +3,9 @@ require('dotenv').config();
 const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
+const competitorRoutes = require('./routes/competitorRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+const recordRoutes = require('./routes/recordRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,6 +21,9 @@ app.get('/', (req, res) => {
 
 // Rutas de autenticación
 app.use('/api/auth', authRoutes);
+app.use('/api/competitors', competitorRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/records', recordRoutes);
 
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto http://localhost:${PORT}`);
