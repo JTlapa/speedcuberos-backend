@@ -31,15 +31,22 @@ const recordController = {
         try {
             const { id_categoria, tiempo_segundos, fecha, nombre_competencia, lugar_competencia } = req.body;
             const id_usuario = req.user?.id_usuario;
+            let id_competidor;
+
             if (!id_usuario) {
                 return res.status(401).json({ message: 'Usuario no autenticado o token inválido.' });
             }
-            const competidorEncontrado = await Competitor.findByUserId(id_usuario);
+            if (req.user?.rol != 'admin') {
+                const competidorEncontrado = await Competitor.findByUserId(id_usuario);
 
-            if (!competidorEncontrado) {
-                return res.status(404).json({ message: 'No se encontró un perfil de competidor asociado a esta cuenta de usuario.' });
+                if (!competidorEncontrado) {
+                    return res.status(404).json({ message: 'No se encontró un perfil de competidor asociado a esta cuenta de usuario.' });
+                }
+                id_competidor = competidorEncontrado.id_competidor;
             }
-            const id_competidor = competidorEncontrado.id_competidor;
+            else {
+                id_competidor = req.body?.id_competidor; 
+            }
             if (!id_categoria || !id_competidor || !tiempo_segundos || !fecha || !nombre_competencia || !lugar_competencia) {
                 return res.status(400).json({ message: 'Todos los campos son requeridos para subir un récord.' });
             }
