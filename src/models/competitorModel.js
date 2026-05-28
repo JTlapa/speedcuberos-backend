@@ -5,6 +5,14 @@ const Competitor = {
         const [rows] = await db.execute('SELECT * FROM Competidor WHERE id_competidor = ?', [id]);
         return rows[0];
     },
+    findByUserId: async (id_usuario) => {
+        const query = `SELECT comp.id_competidor 
+        FROM Competidor comp
+        INNER JOIN Usuario u ON comp.nombre_completo = u.nombre_completo
+        WHERE u.id_usuario = ?`;
+        const [rows] = await db.execute(query, [id_usuario]);
+        return rows[0];
+    },
     create: async (data) => {
         const { nombre_completo, edad, pais, red_social } = data;
         const query = 'INSERT INTO Competidor (nombre_completo, edad, pais, red_social) VALUES (?, ?, ?, ?)';

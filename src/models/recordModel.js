@@ -28,6 +28,18 @@ const Record = {
         return rows;
     },
 
+    findByUser: async (id_usuario) => {
+        const query = `
+            SELECT r.*, cat.nombre_cubo 
+            FROM Record r
+            JOIN CategoriaCubo cat ON r.id_categoria = cat.id_categoria 
+            JOIN Competidor comp ON r.id_competidor = comp.id_competidor
+            JOIN Usuario u ON comp.nombre_completo = u.nombre_completo 
+            WHERE u.id_usuario = ?
+        `;
+        const [rows] = await db.execute(query, [id_usuario]);
+        return rows;
+    },
     create: async (data) => {
         const { id_categoria, id_competidor, tiempo_segundos, fecha, nombre_competencia, lugar_competencia } = data;
         const query = `
